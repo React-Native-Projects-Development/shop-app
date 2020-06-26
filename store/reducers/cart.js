@@ -1,4 +1,4 @@
-import { ADD_TO_CART } from "../utils/const";
+import { ADD_TO_CART } from "../utils/actions";
 import CartItem from "../../models/cart-item";
 
 const initialState = {
