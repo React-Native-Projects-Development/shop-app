@@ -35,7 +35,11 @@ export const signup = (email, password) => {
 
     console.log(resData);
 
-    dispatch({ type: SIGN_UP });
+    dispatch({
+      type: SIGN_UP,
+      token: resData.idToken,
+      userId: resData.localId,
+    });
   };
 };
 
@@ -73,6 +77,6 @@ export const login = (email, password) => {
 
     console.log(resData);
 
-    dispatch({ type: LOG_IN });
+    dispatch({ type: LOG_IN, token: resData.idToken, userId: resData.localId });
   };
 };
