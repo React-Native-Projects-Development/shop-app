@@ -23,6 +23,7 @@ const StartupScreen = (props) => {
         userData
       ); /* parses a string in JSON format and converts it to JS object or array*/
       const { token, userId, expiryDate } = transformedData;
+
       const expirationDate = new Date(expiryDate);
 
       if (expirationDate <= new Date() || !token || !userId) {
@@ -30,8 +31,11 @@ const StartupScreen = (props) => {
         return;
       }
 
+      // Expiration date = future date, new Date().getTime() = current date
+      const expirationTime = expirationDate.getTime() - new Date().getTime();
+
       props.navigation.navigate("Shop");
-      dispatch(authenticate(userId, token));
+      dispatch(authenticate(userId, token, expirationTime));
     };
 
     tryLogIn();
