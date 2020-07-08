@@ -10,7 +10,7 @@ export const fetchProducts = () => {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        "https://rn-shop-app-73043.firebaseio.com/products.jon"
+        "https://rn-shop-app-73043.firebaseio.com/products.json"
       );
 
       /* This one Validates 400 & 500 errors */
