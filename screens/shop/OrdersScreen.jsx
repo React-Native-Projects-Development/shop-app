@@ -16,7 +16,7 @@ import { fetchOrders } from "../../store/actions/orders";
 import { ActivityIndicator } from "react-native-paper";
 import Colors from "../../constants/Colors";
 
-const OrdersScreen = () => {
+const OrdersScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const orders = useSelector((state) => state.orders.orders);
@@ -53,6 +53,19 @@ const OrdersScreen = () => {
           title="Try again"
           onPress={loadOrders}
           color={Colors.primaryColor}
+        />
+      </View>
+    );
+  }
+
+  if (orders.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No orders yet. Maybe start ordering some products?</Text>
+        <Button
+          title="Start Shopping"
+          color={Colors.primaryColor}
+          onPress={() => props.navigation.navigate("Products")}
         />
       </View>
     );
