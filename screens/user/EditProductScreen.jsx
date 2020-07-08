@@ -229,10 +229,6 @@ EditProductScreen.navigationOptions = (navData) => {
   };
 };
 
-AuthScreen.navigationOptions = {
-  headerTitle: "Authenticate",
-};
-
 const styles = StyleSheet.create({
   form: {
     margin: 20,
