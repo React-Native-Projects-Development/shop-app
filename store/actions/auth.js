@@ -3,11 +3,16 @@ import { AUTHENTICATE, LOGOUT } from "../utils/actions";
 
 const token = "AIzaSyCkGQ2Rmz9qes7ahh-qO8-dXLdvIl-xGcU";
 
-export const authenticate = (userId, token) => {
-  return {
-    type: AUTHENTICATE,
-    userId,
-    token,
+let timer;
+
+export const authenticate = (userId, token, expiryTime) => {
+  return (dispatch) => {
+    dispatch(setLogoutTimer(expiryTime));
+    dispatch({
+      type: AUTHENTICATE,
+      userId,
+      token,
+    });
   };
 };
 
@@ -42,7 +47,13 @@ export const signup = (email, password) => {
 
     const resData = await response.json();
 
-    dispatch(authenticate(resData.localId, resData.idToken));
+    dispatch(
+      authenticate(
+        resData.localId,
+        resData.idToken,
+        +resData.expiresIn * 1000
+      ) /* expiresIn returns value in seconds so we multiply it by 1000 to transform it to ms */
+    );
     const expirationDate = new Date(
       new Date().getTime() + +resData.expiresIn * 1000
     );
@@ -82,7 +93,9 @@ export const login = (email, password) => {
 
     const resData = await response.json();
 
-    dispatch(authenticate(resData.localId, resData.idToken));
+    dispatch(
+      authenticate(resData.localId, resData.idToken, +resData.expiresIn * 1000)
+    );
 
     const expirationDate = new Date(
       new Date().getTime() + +resData.expiresIn * 1000
@@ -92,11 +105,24 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  return async (dispatch) => {
-    await AsyncStorage.removeItem("userData");
-    dispatch({
-      type: LOGOUT,
-    });
+  clearLogoutTimer();
+  AsyncStorage.removeItem("userData");
+  return {
+    type: LOGOUT,
+  };
+};
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+const setLogoutTimer = (expirationTime) => {
+  return (dispatch) => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
   };
 };
 
