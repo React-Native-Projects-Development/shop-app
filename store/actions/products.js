@@ -13,8 +13,11 @@ export const fetchProducts = () => {
         "https://rn-shop-app-73043.firebaseio.com/products.json"
       );
 
-      const resData = await response.json();
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
 
+      const resData = await response.json();
       const loadedProducts = [];
 
       for (const key in resData) {
@@ -32,7 +35,8 @@ export const fetchProducts = () => {
 
       dispatch({ type: SET_PRODUCTS, products: loadedProducts });
     } catch (error) {
-      console.log(error);
+      // send to custom analytics server
+      throw error;
     }
   };
 };
