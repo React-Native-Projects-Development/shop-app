@@ -146,7 +146,7 @@ const EditProductScreen = (props) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior="padding"
+      behavior="height"
       keyboardVerticalOffset={10}
     >
       <ScrollView>
@@ -227,6 +227,10 @@ EditProductScreen.navigationOptions = (navData) => {
       </HeaderButtons>
     ),
   };
+};
+
+AuthScreen.navigationOptions = {
+  headerTitle: "Authenticate",
 };
 
 const styles = StyleSheet.create({
