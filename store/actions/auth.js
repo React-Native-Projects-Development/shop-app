@@ -1,5 +1,5 @@
 import { AsyncStorage } from "react-native";
-import { AUTHENTICATE } from "../utils/actions";
+import { AUTHENTICATE, LOGOUT } from "../utils/actions";
 
 const token = "AIzaSyCkGQ2Rmz9qes7ahh-qO8-dXLdvIl-xGcU";
 
@@ -88,6 +88,15 @@ export const login = (email, password) => {
       new Date().getTime() + +resData.expiresIn * 1000
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
+};
+
+export const logout = () => {
+  return async (dispatch) => {
+    await AsyncStorage.removeItem("userData");
+    dispatch({
+      type: LOGOUT,
+    });
   };
 };
 
