@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, Platform, View, StyleSheet } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  FlatList,
+  Platform,
+  View,
+  StyleSheet,
+  Text,
+  Button,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -11,15 +18,20 @@ import Colors from "../../constants/Colors";
 
 const OrdersScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const orders = useSelector((state) => state.orders.orders);
   const dispatch = useDispatch();
 
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
+    setError(null);
     setIsLoading(true);
-
-    await dispatch(fetchOrders());
+    try {
+      await dispatch(fetchOrders());
+    } catch (error) {
+      setError(error.message);
+    }
     setIsLoading(false);
-  };
+  }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
     loadOrders();
@@ -29,6 +41,19 @@ const OrdersScreen = () => {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color={Colors.primaryColor} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text>{error}</Text>
+        <Button
+          title="Try again"
+          onPress={loadOrders}
+          color={Colors.primaryColor}
+        />
       </View>
     );
   }
