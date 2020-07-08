@@ -60,7 +60,7 @@ const ProductsOverviewScreen = (props) => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text>An error ocurred!</Text>
+        <Text>{error}</Text>
         <Button
           title="Try Again"
           onPress={loadProducts}
