@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 import ReduxThunk from "redux-thunk";
+import * as Notifications from "expo-notifications";
 
 import productsReducer from "./store/reducers/products";
 import cartReducer from "./store/reducers/cart";
@@ -17,6 +18,14 @@ const fetchFonts = () => {
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
 };
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 
 const rootReducer = combineReducers({
   products: productsReducer,
